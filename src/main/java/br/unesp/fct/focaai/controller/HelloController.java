@@ -1,4 +1,4 @@
-package br.unesp.fct.focaai;
+package br.unesp.fct.focaai.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

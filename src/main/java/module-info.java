@@ -10,4 +10,6 @@ module br.unesp.fct.focaai {
     opens br.unesp.fct.focaai to javafx.fxml, org.junit.platform.commons;
 
     exports br.unesp.fct.focaai;
+    exports br.unesp.fct.focaai.controller;
+    opens br.unesp.fct.focaai.controller to javafx.fxml, org.junit.platform.commons;
 }
