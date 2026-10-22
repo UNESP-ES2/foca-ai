@@ -25,19 +25,20 @@ public class CatalogoDisciplinas{
     // atributos relacionados com o Json
     private final File arquivoJson;
     private final ObjectMapper objectMapper;
-    
-    public CatalogoDisciplinas(){
-        
-        String caminhoPacote = "src/main/java/br/unesp/fct/focaai/Json"; 
-        
+
+    // construtor de CatalogoDisciplinas para persistência
+    public CatalogoDisciplinas() {
+        this("src/main/java/br/unesp/fct/focaai/Json");
+    }
+
+    // construtor para persistência dos dados originais + persistência dos dados de teste
+    public CatalogoDisciplinas(String caminhoPacote) {
         File pastaDiretorio = new File(caminhoPacote);
-        
         arquivoJson = new File(pastaDiretorio, "disciplinas.json");
-        
-        // o object mapper serve para formatar o JSON com quebras de linha!
+
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
         carregarJson();
     }
     

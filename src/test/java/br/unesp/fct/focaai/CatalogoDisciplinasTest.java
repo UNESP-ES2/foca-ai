@@ -9,9 +9,8 @@ import br.unesp.fct.focaai.model.Disciplina;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
+import java.io.File;
 
-
-import java.nio.file.Path;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -23,19 +22,18 @@ public class CatalogoDisciplinasTest {
     
     
     private CatalogoDisciplinas catalogoDisciplinas;
-    
-    // é um diretorio temporário para o Json
+
+    // cria uma pasta temporária
     @TempDir
-    static Path tempDir;
+    File pastaTemporaria;
 
     @BeforeEach
     public void setUp() {
-        
-        catalogoDisciplinas = new CatalogoDisciplinas();
-        
-        
+        // passa o caminho da pasta temporária para o novo construtor
+        catalogoDisciplinas = new CatalogoDisciplinas(pastaTemporaria.getAbsolutePath());
+
         catalogoDisciplinas.setDisciplinas(new ArrayList<>());
-        catalogoDisciplinas.salvarJson();
+        catalogoDisciplinas.salvarJson(); // salva só no arquivo temporário!
     }
     
     @Test
