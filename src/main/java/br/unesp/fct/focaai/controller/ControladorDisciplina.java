@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ControladorDisciplina {
 
-	private CatalogoDisciplinas catalogoDisciplinas;
+    private CatalogoDisciplinas catalogoDisciplinas;
 
 	// construtor que inicializa o catalogoDisciplinas
 	public ControladorDisciplina() {
@@ -17,33 +17,45 @@ public class ControladorDisciplina {
 		this.catalogoDisciplinas = catalogo;
 	}
 
-	public void editarNomeDisciplina(Disciplina disciplina, String novoNome) {
-		if (disciplina != null) {
-			disciplina.setNome(novoNome);
-			catalogoDisciplinas.salvarJson();
-		}
-	}
+    public void editarNomeDisciplina(Disciplina disciplina, String novoNome) {
 
-	public void criarDisciplina(String nomeDisciplina) {
-		catalogoDisciplinas.criarDisciplinas(nomeDisciplina);
-	}
+        boolean existe = catalogoDisciplinas.verificarNomeJaExiste(novoNome);
 
-	public Disciplina buscarDisciplina(String nomeDisciplina) {
-		return null;
-	}
+        if (existe == false && disciplina != null) {
+            for (Disciplina d: catalogoDisciplinas.listarDisciplinas()){
+                if (d.getNome().equals(disciplina.getNome())){
 
-	public ArrayList listarDisciplinas() {
-		return catalogoDisciplinas.listarDisciplinas();
-	}
+                    // procura na lista a disciplina e altera o nome dela
+                    d.setNome(novoNome);
 
-	public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
+                    break;
+                }
+            }
+            catalogoDisciplinas.salvarJson();
+        }
+    }
 
-	}
+    public void criarDisciplina(String nomeDisciplina) {
+        catalogoDisciplinas.criarDisciplinas(nomeDisciplina);
+    }
+    public Disciplina buscarDisciplina(String nomeDisciplina) {
+        Disciplina busca = catalogoDisciplinas.buscarDisciplina(nomeDisciplina);
 
-	public void confirmarExclusao(Disciplina disciplina, boolean proceder) {
-		if (proceder && disciplina != null) {
-			catalogoDisciplinas.excluirDisciplina(disciplina);
-		}
-	}
+        return busca;
+    }
 
+    public ArrayList<Disciplina> listarDisciplinas() {
+        return catalogoDisciplinas.getDisciplinas();
+    }
+
+    public void confirmarExclusao(Disciplina disciplina, boolean proceder) {
+        if (proceder == true && disciplina != null) {
+            catalogoDisciplinas.excluirDisciplina(disciplina);
+        }
+    }
+
+    // TODO: função ainda não completa, pois 'registros' não é dessa sprint
+    public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
+        catalogoDisciplinas.verificarRegistrosSessoes(disciplinaParaExclusao);
+    }
 }
