@@ -8,6 +8,14 @@ public class ControladorDisciplina {
 
 	private CatalogoDisciplinas catalogoDisciplinas;
 
+	// construtor que inicializa o catalogoDisciplinas
+	public ControladorDisciplina() {
+		this.catalogoDisciplinas = new CatalogoDisciplinas();
+	}
+
+	public ControladorDisciplina(CatalogoDisciplinas catalogo) {
+	}
+
 	public void editarNomeDisciplina(Disciplina disciplina, String novoNome) {
 
 	}
