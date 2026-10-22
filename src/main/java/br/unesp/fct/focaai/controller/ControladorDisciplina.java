@@ -14,14 +14,18 @@ public class ControladorDisciplina {
 	}
 
 	public ControladorDisciplina(CatalogoDisciplinas catalogo) {
+		this.catalogoDisciplinas = catalogo;
 	}
 
 	public void editarNomeDisciplina(Disciplina disciplina, String novoNome) {
-
+		if (disciplina != null) {
+			disciplina.setNome(novoNome);
+			catalogoDisciplinas.salvarJson();
+		}
 	}
 
 	public void criarDisciplina(String nomeDisciplina) {
-
+		catalogoDisciplinas.criarDisciplinas(nomeDisciplina);
 	}
 
 	public Disciplina buscarDisciplina(String nomeDisciplina) {
