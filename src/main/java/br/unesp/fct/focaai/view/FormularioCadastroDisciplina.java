@@ -98,6 +98,13 @@ public class FormularioCadastroDisciplina {
             labelErro.setText("O nome só pode conter caracteres alfanuméricos.");
             return false;
         }
+
+        // verificação case-insensitive no cadastro
+        if (controladorDisciplina.verificarNomeJaExiste(nomeDisciplina) == true){
+            labelErro.setText("O nome já existe (case-insensitive).");
+            return false;
+        }
+
         labelErro.setText("");
         return true;
     }

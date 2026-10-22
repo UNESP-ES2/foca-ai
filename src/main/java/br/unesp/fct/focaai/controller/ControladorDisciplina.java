@@ -58,4 +58,8 @@ public class ControladorDisciplina {
     public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
         catalogoDisciplinas.verificarRegistrosSessoes(disciplinaParaExclusao);
     }
+
+    public boolean verificarNomeJaExiste(String nome){
+        return catalogoDisciplinas.verificarNomeJaExiste(nome);
+    }
 }
