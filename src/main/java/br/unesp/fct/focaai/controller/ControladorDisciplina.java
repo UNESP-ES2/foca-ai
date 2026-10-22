@@ -37,7 +37,9 @@ public class ControladorDisciplina {
 	}
 
 	public void confirmarExclusao(Disciplina disciplina, boolean proceder) {
-
+		if (proceder && disciplina != null) {
+			catalogoDisciplinas.excluirDisciplina(disciplina);
+		}
 	}
 
 }

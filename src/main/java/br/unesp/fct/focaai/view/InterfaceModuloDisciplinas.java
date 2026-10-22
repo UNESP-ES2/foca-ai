@@ -123,20 +123,62 @@ public class InterfaceModuloDisciplinas {
 		return null;
 	}
 
-	public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
+	// Guarda temporariamente a disciplina selecionada para o fluxo de confirmação
+	private Disciplina disciplinaEmExclusao;
 
+	public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
+		if(disciplinaParaExclusao == null) return; // retorna se nenhuma disciplina for selecionada
+		this.disciplinaEmExclusao = disciplinaParaExclusao;
+
+		// TODO: Na sprint-1 (BL-1) ainda nao foram implementadas sessoes de estudo (sempre falso, por enquanto)
+		boolean temSessoes = false;
+
+		exibirConfirmacaoComAlertas(temSessoes);
 	}
 
 	public void exibirConfirmacaoComAlertas(boolean temSessoesVinculadas) {
+		if(disciplinaEmExclusao == null) return;
 
+		Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+		alerta.initOwner(stagePrincipal);
+		alerta.setTitle("Confirmação de Exclusão");
+		alerta.setHeaderText("Excluir a disciplina \"" + disciplinaEmExclusao.getNome() + "\"?");
+
+		// Mensagem diferenciada segundo os requisitos
+		if (temSessoesVinculadas) {
+			alerta.setContentText("Atenção: existem sessões de estudo vinculadas que também serão afetadas.\nDeseja realmente continuar?");
+		} else {
+			alerta.setContentText("Esta ação não poderá ser desfeita. Deseja prosseguir?");
+		}
+		// Espera a resposta do usuário
+		alerta.showAndWait().ifPresent(botaoEscolhido -> {
+			boolean proceder = (botaoEscolhido == ButtonType.OK);
+			confirmarExclusao(disciplinaEmExclusao, proceder);
+		});
 	}
 
 	public void confirmarExclusao(Disciplina disciplina, boolean proceder) {
+		if(proceder) {
+			// Envia a confiormacao para o controlador persistir no catalogo
+			controladorDisciplina.confirmarExclusao(disciplina, true);
 
+			// exibir alerta de sucesso e atualiza a tabela
+			exibirMensagemSucesso();
+
+			// atualizando a tablea de disciplinas
+			listarDisciplinas();
+		}
+
+		this.disciplinaEmExclusao = null;
 	}
 
 	public void exibirMensagemSucesso() {
-
+		Alert alertaSucesso = new Alert(Alert.AlertType.INFORMATION);
+		alertaSucesso.initOwner(stagePrincipal);
+		alertaSucesso.setTitle("Sucesso");
+		alertaSucesso.setHeaderText(null);
+		alertaSucesso.setContentText("Disciplina excluída com sucesso!");
+		alertaSucesso.showAndWait();
 	}
 
 	public void selecionarDisciplinaParaEdicao(Disciplina disciplina) {
