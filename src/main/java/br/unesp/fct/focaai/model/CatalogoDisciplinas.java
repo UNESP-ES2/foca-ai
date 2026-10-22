@@ -21,6 +21,8 @@ import java.io.IOException;
 public class CatalogoDisciplinas{
     
     private ArrayList<Disciplina> disciplinas = new ArrayList<>();
+    
+    // atributos relacionados com o Json
     private final File arquivoJson;
     private final ObjectMapper objectMapper;
     
@@ -164,16 +166,34 @@ public class CatalogoDisciplinas{
     
     
 
-    public void salvarJson(){
+    // grava com integridade atômica -> evita que caso programa falhe, o disciplinas.json fique pela metade ou corrompido
+    public void salvarJson() {
+
+        // cria um arquivo temporário na mesma pasta do arquivo oficial
+        File arquivoTemp = new File(arquivoJson.getParent(), arquivoJson.getName() + ".tmp");
+
         try {
-            
-            // converte ArrayList -> JSON + reescreve o arquivo
-            objectMapper.writeValue(arquivoJson, this.disciplinas);
-            
-            System.out.println("Arquivo JSON salvo com sucesso");
-        
+            //  escreve primeiro no arquivo temporário
+            objectMapper.writeValue(arquivoTemp, this.disciplinas);
+
+            //  substitui o arquivo original pelo temporário de forma atômica
+            // o temp vira oficial
+            java.nio.file.Files.move(
+                    arquivoTemp.toPath(),
+                    arquivoJson.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+                    java.nio.file.StandardCopyOption.ATOMIC_MOVE
+            );
+
+            System.out.println("Arquivo JSON salvo com sucesso.");
+
         } catch (IOException e) {
             System.err.println("Erro ao salvar o arquivo JSON: " + e.getMessage());
+
+            // se algo der errado -> limpa o temp
+            if (arquivoTemp.exists()) {
+                arquivoTemp.delete();
+            }
         }
     }
     
