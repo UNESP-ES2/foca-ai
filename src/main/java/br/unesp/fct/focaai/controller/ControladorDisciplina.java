@@ -29,7 +29,7 @@ public class ControladorDisciplina {
 	}
 
 	public ArrayList listarDisciplinas() {
-		return null;
+		return catalogoDisciplinas.listarDisciplinas();
 	}
 
 	public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
