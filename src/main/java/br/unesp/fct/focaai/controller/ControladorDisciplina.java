@@ -6,30 +6,51 @@ import java.util.ArrayList;
 
 public class ControladorDisciplina {
 
-	private CatalogoDisciplinas catalogoDisciplinas;
+    private CatalogoDisciplinas catalogoDisciplinas;
 
-	public void editarNomeDisciplina(Disciplina disciplina, String novoNome) {
+    public ControladorDisciplina() {
+        this.catalogoDisciplinas = new CatalogoDisciplinas();
+    }
 
-	}
+    public void criarDisciplina(String nomeDisciplina) {
+        catalogoDisciplinas.criarDisciplinas(nomeDisciplina);
+    }
 
-	public void criarDisciplina(String nomeDisciplina) {
+    public ArrayList<Disciplina> listarDisciplinas() {
+        return catalogoDisciplinas.getDisciplinas();
+    }
 
-	}
+    public void editarNomeDisciplina(Disciplina disciplina, String novoNome) {
 
-	public Disciplina buscarDisciplina(String nomeDisciplina) {
-		return null;
-	}
+        boolean existe = catalogoDisciplinas.verificarNomeJaExiste(novoNome);
 
-	public ArrayList listarDisciplinas() {
-		return null;
-	}
+        if (existe == false && disciplina != null) {
+            for (Disciplina d: catalogoDisciplinas.listarDisciplinas()){
+                if (d.getNome().equals(disciplina.getNome())){
+                    d.setNome(novoNome);
+                    
+                    break;
+                }
+            }
+            catalogoDisciplinas.salvarJson();
+        }
+    }
 
-	public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
+    public void confirmarExclusao(Disciplina disciplina, boolean proceder) {
+        if (proceder == true && disciplina != null) {
+            catalogoDisciplinas.excluirDisciplina(disciplina);
+        }
+    }
 
-	}
+    // função ainda não completa, pois 'registros' não é dessa sprint
+    public void excluirDisciplina(Disciplina disciplinaParaExclusao) {
+        catalogoDisciplinas.verificarRegistrosSessoes(disciplinaParaExclusao);
+    }
 
-	public void confirmarExclusao(Disciplina disciplina, boolean proceder) {
+    public Disciplina buscarDisciplina(String nomeDisciplina) {
+        Disciplina busca = catalogoDisciplinas.buscarDisciplina(nomeDisciplina);
 
-	}
+        return busca;
+    }
 
 }

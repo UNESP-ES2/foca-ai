@@ -83,7 +83,6 @@ public class CatalogoDisciplinas{
             }
         }
         
-        // tem que fazer o tratamento no controlador!
         return null;
         
     }
@@ -139,7 +138,7 @@ public class CatalogoDisciplinas{
             
             // compara ignorando o letra maiúscula e letra minúscula
             if (d.getNome().equalsIgnoreCase(nomeDisciplina)){
-                System.out.println("PAM " + d.getNome());
+                
                 // existe
                 return true;
             }
