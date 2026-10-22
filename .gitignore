@@ -31,6 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+disciplinas.json
 
 ### Logs e Arquivos Temporários de Crash do Java ###
 *.log
