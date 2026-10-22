@@ -87,6 +87,21 @@ public class CatalogoDisciplinas{
         return null;
         
     }
+
+    public ArrayList<Disciplina> buscarDisciplinaTrecho(String nomeDisciplina){
+        // precisa ler para manter atualizado!
+        carregarJson();
+
+        ArrayList<Disciplina> lista = new ArrayList<>();
+
+        for (Disciplina c: disciplinas){
+            if (c.getNome().contains(nomeDisciplina)){
+                lista.add(c);
+            }
+        }
+
+        return lista;
+    }
     
     
     public ArrayList<Disciplina> listarDisciplinas (){

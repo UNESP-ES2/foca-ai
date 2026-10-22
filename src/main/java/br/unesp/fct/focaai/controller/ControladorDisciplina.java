@@ -44,6 +44,10 @@ public class ControladorDisciplina {
         return busca;
     }
 
+    public ArrayList<Disciplina> buscarDisciplinaTrecho(String nomeDisciplina){
+        return catalogoDisciplinas.buscarDisciplinaTrecho (nomeDisciplina);
+    }
+
     public ArrayList<Disciplina> listarDisciplinas() {
         return catalogoDisciplinas.getDisciplinas();
     }

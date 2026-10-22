@@ -95,7 +95,7 @@ public class InterfaceModuloDisciplinas {
 	}
 
 	public void selecionarOpcoesCadastro() {
-	formularioCadastroDisciplina.exibir();
+		formularioCadastroDisciplina.exibir();
 	}
 
 	private void listarDisciplinas() {
@@ -112,7 +112,17 @@ public class InterfaceModuloDisciplinas {
 	}
 
 	public void buscarDisciplina(String nomeDisciplina) {
+		ArrayList<Disciplina> disciplina = controladorDisciplina.buscarDisciplinaTrecho(nomeDisciplina);
 
+		if(disciplina != null) {
+			tabela.setItems(FXCollections.observableArrayList(disciplina));
+		} else{
+			tabela.getItems().clear();
+		}
+
+		if("".equals(nomeDisciplina)) {
+			listarDisciplinas();
+		}
 	}
 
 	public void validarNome(String nomeDisciplina) {
