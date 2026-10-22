@@ -27,6 +27,8 @@ public class ControladorDisciplina {
         if (existe == false && disciplina != null) {
             for (Disciplina d: catalogoDisciplinas.listarDisciplinas()){
                 if (d.getNome().equals(disciplina.getNome())){
+                    
+                    // procura na lista a disciplina e altera o nome dela
                     d.setNome(novoNome);
                     
                     break;
