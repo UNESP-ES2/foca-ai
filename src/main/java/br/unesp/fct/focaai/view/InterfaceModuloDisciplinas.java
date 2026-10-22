@@ -95,7 +95,7 @@ public class InterfaceModuloDisciplinas {
 	}
 
 	public void selecionarOpcoesCadastro() {
-
+	formularioCadastroDisciplina.exibir();
 	}
 
 	private void listarDisciplinas() {
@@ -182,7 +182,7 @@ public class InterfaceModuloDisciplinas {
 	}
 
 	public void selecionarDisciplinaParaEdicao(Disciplina disciplina) {
-
+		formularioEdicaoDisciplina.exibirFormularioEdicao(disciplina);
 	}
 
 }
