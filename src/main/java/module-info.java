@@ -1,6 +1,7 @@
 module br.unesp.fct.focaai {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
     requires com.fasterxml.jackson.databind;
 
     // Acesso por reflexão para o JavaFX, JUnit Platform e Jackson

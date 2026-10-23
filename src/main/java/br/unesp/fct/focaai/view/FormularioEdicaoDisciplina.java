@@ -5,6 +5,7 @@ import br.unesp.fct.focaai.model.Disciplina;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -35,12 +36,24 @@ public class FormularioEdicaoDisciplina {
 		stageModal.initModality(Modality.APPLICATION_MODAL);
 		stageModal.setTitle("Editar Disciplina");
 
+		Label lblTitulo = new Label("Editar Disciplina");
+		lblTitulo.getStyleClass().add("app-title");
+		lblTitulo.setStyle("-fx-font-size: 16px;");
+
+		Label lblCampo = new Label("Nome da Disciplina:");
+		lblCampo.getStyleClass().add("form-label");
+
 		campoNome = new TextField();
+		campoNome.getStyleClass().add("form-input");
+
 		labelErro = new Label();
-		labelErro.setStyle("-fx-text-fill: red; -fx-font-size: 11px;");
+		labelErro.getStyleClass().add("form-error");
 
 		Button btnSalvar = new Button("Salvar Alterações");
+		btnSalvar.getStyleClass().add("btn-primary");
+
 		Button btnCancelar = new Button("Cancelar");
+		btnCancelar.getStyleClass().add("btn-secondary");
 
 		btnSalvar.setOnAction(e -> {
 			if(disciplinaEmEdicao != null) {
@@ -49,16 +62,26 @@ public class FormularioEdicaoDisciplina {
 		});
 		btnCancelar.setOnAction(e -> stageModal.close());
 
-		HBox botoes = new HBox(10, btnSalvar, btnCancelar);
-		VBox layout = new VBox(
-				new Label("Nome da Disciplina:"),
+		HBox botoes = new HBox(10, btnCancelar, btnSalvar);
+		botoes.setAlignment(Pos.CENTER_RIGHT);
+
+		VBox layout = new VBox(10,
+				lblTitulo,
+				lblCampo,
 				campoNome,
 				labelErro,
 				botoes
 		);
+		layout.getStyleClass().add("modal-pane");
 
-		layout.setPadding(new Insets(15));
-		stageModal.setScene(new Scene(layout, 320, 200));
+		Scene cenaModal = new Scene(layout, 420, 240);
+		var cssUrl = getClass().getResource("/br/unesp/fct/focaai/styles.css");
+		if (cssUrl != null) {
+			cenaModal.getStylesheets().add(cssUrl.toExternalForm());
+		}
+
+		stageModal.setScene(cenaModal);
+		stageModal.setResizable(false);
 	}
 
 	private void editarNomeDisciplina(Disciplina disciplina, String novoNome) {
@@ -112,6 +135,12 @@ public class FormularioEdicaoDisciplina {
 		alerta.setTitle("Sucesso");
 		alerta.setHeaderText(null);
 		alerta.setContentText("Disciplina editada com sucesso!");
+
+		var cssUrl = getClass().getResource("/br/unesp/fct/focaai/styles.css");
+		if (cssUrl != null) {
+			alerta.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
+		}
+
 		alerta.showAndWait();
 	}
 

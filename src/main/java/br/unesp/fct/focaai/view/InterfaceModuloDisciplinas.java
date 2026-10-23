@@ -7,8 +7,11 @@ import br.unesp.fct.focaai.model.Disciplina;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -38,22 +41,87 @@ public class InterfaceModuloDisciplinas {
 	// métoddo que inicia o módulo e monta a composiçao visual
 	public Parent abrirModuloDisciplinas() {
 		BorderPane layout = new BorderPane();
-		layout.setPadding(new Insets(15));
+		layout.getStyleClass().add("main-window-root");
+
+		VBox cardContainer = new VBox();
+		cardContainer.getStyleClass().add("content-card");
+
+		// Cabeçalho amigável voltado ao estudante / usuário
+		Label lblTitulo = new Label("Minhas Disciplinas");
+		lblTitulo.getStyleClass().add("app-title");
+
+		Label lblSubtitulo = new Label("Organize suas matérias e planeje seus estudos no FocaAi");
+		lblSubtitulo.getStyleClass().add("app-subtitle");
+
+		VBox titulos = new VBox(2, lblTitulo, lblSubtitulo);
+
+		// Mascote Corujinha carismática e balãozinho de boas-vindas
+		ImageView imgCorujinha = new ImageView();
+		Image imgMascote = carregarImagemMascote(80, 80);
+		if (imgMascote != null) {
+			imgCorujinha.setImage(imgMascote);
+			imgCorujinha.setFitWidth(80);
+			imgCorujinha.setFitHeight(80);
+			imgCorujinha.setPreserveRatio(true);
+			imgCorujinha.setSmooth(true);
+		}
+
+		Label lblBalaoTitulo = new Label("Bora focar hoje? 🦉✨");
+		lblBalaoTitulo.getStyleClass().add("speech-bubble-title");
+
+		Label lblBalaoSub = new Label("Vamos organizar suas matérias com calma!");
+		lblBalaoSub.getStyleClass().add("speech-bubble-subtitle");
+
+		VBox speechBubble = new VBox(2, lblBalaoTitulo, lblBalaoSub);
+		speechBubble.getStyleClass().add("speech-bubble");
+		speechBubble.setAlignment(Pos.CENTER_LEFT);
+
+		HBox mascotBox = new HBox(10, speechBubble, imgCorujinha);
+		mascotBox.setAlignment(Pos.CENTER_RIGHT);
+
+		Region spacerHeader = new Region();
+		HBox.setHgrow(spacerHeader, Priority.ALWAYS);
+
+		HBox header = new HBox(titulos, spacerHeader, mascotBox);
+		header.getStyleClass().add("header-container");
+		header.setAlignment(Pos.CENTER_LEFT);
 
 		// Tabela de disciplinas (LIFO)
 		tabela = new TableView<>();
 		// Disciplina - tipo do objeto que representa a linha inteira
 		// String - tipo do dado que será exibido na coluna
+		tabela.getStyleClass().add("custom-table");
+		tabela.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		VBox.setVgrow(tabela, Priority.ALWAYS);
+
 		TableColumn<Disciplina, String> coluna = new TableColumn<>("Nome da Disciplina");
 		// define o que será exibido na tabela, nesse caso, o nome da disciplina
 		coluna.setCellValueFactory(disciplina -> new SimpleStringProperty(disciplina.getValue().getNome()));
-		coluna.setPrefWidth(450);
 		tabela.getColumns().add(coluna);
-		tabela.setPlaceholder(new Label("Nenhuma disciplina cadastrada."));
 
 		// Campo de busca
+		VBox placeholder = new VBox(10);
+		placeholder.setAlignment(Pos.CENTER);
+		Image imgPlaceholderMascote = carregarImagemMascote(96, 96);
+		if (imgPlaceholderMascote != null) {
+			ImageView imgPlaceholder = new ImageView(imgPlaceholderMascote);
+			imgPlaceholder.setFitWidth(96);
+			imgPlaceholder.setFitHeight(96);
+			imgPlaceholder.setPreserveRatio(true);
+			imgPlaceholder.setSmooth(true);
+			placeholder.getChildren().add(imgPlaceholder);
+		}
+		Label lblVazioTitulo = new Label("Nenhuma matéria por aqui ainda!");
+		lblVazioTitulo.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E1B4B;");
+		Label lblVazioSub = new Label("Clique em '+ Cadastrar' para começar sua jornada no FocaAi 🦉✨");
+		lblVazioSub.setStyle("-fx-font-size: 12.5px; -fx-text-fill: #64748B;");
+		placeholder.getChildren().addAll(lblVazioTitulo, lblVazioSub);
+		tabela.setPlaceholder(placeholder);
+
+		// Campo de busca estilo pílula
 		campoBusca = new TextField();
-		campoBusca.setPromptText("Buscar disciplina...");
+		campoBusca.setPromptText("🔍 Buscar disciplina por nome...");
+		campoBusca.getStyleClass().add("search-field");
 		campoBusca.setMaxWidth(Double.MAX_VALUE);
 		// permite o campo crecer até o maximo da tela restante
 		HBox.setHgrow(campoBusca, Priority.ALWAYS);
@@ -62,10 +130,15 @@ public class InterfaceModuloDisciplinas {
 		// newV - novo valor do texto
 		campoBusca.textProperty().addListener((obs, oldV, newV) -> buscarDisciplina(newV));
 
-		// Botões de ação disparando as mensagens do diagrama
-		Button btnCadastrar = new Button("Cadastrar");
-		Button btnEditar = new Button("Editar");
-		Button btnExcluir = new Button("Excluir");
+		// Botões de ação estilizados com semântica de cores
+		Button btnCadastrar = new Button("+ Cadastrar");
+		btnCadastrar.getStyleClass().add("btn-primary");
+
+		Button btnEditar = new Button("✏ Editar");
+		btnEditar.getStyleClass().add("btn-secondary");
+
+		Button btnExcluir = new Button("🗑 Excluir");
+		btnExcluir.getStyleClass().add("btn-danger");
 
 		btnCadastrar.setOnAction(e -> selecionarOpcoesCadastro());
 
@@ -84,10 +157,13 @@ public class InterfaceModuloDisciplinas {
 		// Horizontal Box - preenche os elementos de forma horizontal
 		// Vertical Box - preenche os elementos de forma vertical
 		HBox botoes = new HBox(10, btnCadastrar, btnEditar, btnExcluir);
-		HBox topo = new HBox(10, botoes, campoBusca);
-		topo.setPadding(new Insets(0, 0, 10, 0));
-		layout.setTop(topo);
-		layout.setCenter(tabela);
+		HBox toolbar = new HBox(12, botoes, campoBusca);
+		toolbar.getStyleClass().add("toolbar-container");
+		toolbar.setAlignment(Pos.CENTER_LEFT);
+
+		cardContainer.getChildren().addAll(header, toolbar, tabela);
+		layout.setCenter(cardContainer);
+
 		// Dispara a listagem inicial
 		listarDisciplinas();
 
@@ -154,6 +230,11 @@ public class InterfaceModuloDisciplinas {
 		alerta.setTitle("Confirmação de Exclusão");
 		alerta.setHeaderText("Excluir a disciplina \"" + disciplinaEmExclusao.getNome() + "\"?");
 
+		var cssUrl = getClass().getResource("/br/unesp/fct/focaai/styles.css");
+		if (cssUrl != null) {
+			alerta.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
+		}
+
 		// Mensagem diferenciada segundo os requisitos
 		if (temSessoesVinculadas) {
 			alerta.setContentText("Atenção: existem sessões de estudo vinculadas que também serão afetadas.\nDeseja realmente continuar?");
@@ -188,11 +269,29 @@ public class InterfaceModuloDisciplinas {
 		alertaSucesso.setTitle("Sucesso");
 		alertaSucesso.setHeaderText(null);
 		alertaSucesso.setContentText("Disciplina excluída com sucesso!");
+
+		var cssUrl = getClass().getResource("/br/unesp/fct/focaai/styles.css");
+		if (cssUrl != null) {
+			alertaSucesso.getDialogPane().getStylesheets().add(cssUrl.toExternalForm());
+		}
+
 		alertaSucesso.showAndWait();
 	}
 
 	public void selecionarDisciplinaParaEdicao(Disciplina disciplina) {
 		formularioEdicaoDisciplina.exibirFormularioEdicao(disciplina);
+	}
+
+	/**
+	 * Carrega a imagem da mascote com supersampling de 2x e filtragem suave acelerada por hardware.
+	 * Garante curvas anti-aliased perfeitas, eliminando qualquer efeito serrilhado ou borrado em telas modernas e HiDPI.
+	 */
+	private Image carregarImagemMascote(int larguraAlvo, int alturaAlvo) {
+		var pngUrl = getClass().getResource("/br/unesp/fct/focaai/images/corujinha-char.png");
+		if (pngUrl != null) {
+			return new Image(pngUrl.toExternalForm(), larguraAlvo * 2, alturaAlvo * 2, true, true);
+		}
+		return null;
 	}
 
 }

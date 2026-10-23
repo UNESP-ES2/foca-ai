@@ -95,7 +95,7 @@ public class CatalogoDisciplinas{
         ArrayList<Disciplina> lista = new ArrayList<>();
 
         for (Disciplina c: disciplinas){
-            if (c.getNome().contains(nomeDisciplina)){
+            if (c.getNome().toLowerCase().contains(nomeDisciplina.toLowerCase())){
                 lista.add(c);
             }
         }
